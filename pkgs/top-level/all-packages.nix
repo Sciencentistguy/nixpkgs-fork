@@ -10806,7 +10806,10 @@ with pkgs;
 
   rnnoise = callPackage ../development/libraries/rnnoise { };
 
-  rnnoise-plugin = callPackage ../development/libraries/rnnoise-plugin {};
+  rnnoise-plugin = callPackage ../development/libraries/rnnoise-plugin {
+      inherit (darwin.apple_sdk.frameworks) WebKit MetalKit CoreAudioKit;
+      inherit (darwin.apple_sdk.libs) simd;
+  };
 
   rnote = callPackage ../applications/graphics/rnote {
     inherit (gst_all_1) gstreamer;

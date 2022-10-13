@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  alsa-lib,
   cmake,
   fetchFromGitHub,
   freetype,
@@ -11,6 +10,11 @@
   pkg-config,
   webkitgtk,
   xorg,
+  llvmPackages,
+  WebKit,
+  MetalKit,
+  CoreAudioKit,
+  simd,
 }:
 stdenv.mkDerivation rec {
   pname = "rnnoise-plugin";
@@ -25,15 +29,31 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [
-    alsa-lib
-    freetype
-    gtk3-x11
-    pcre
-    webkitgtk
-    xorg.libX11
-    xorg.libXrandr
+  patches = lib.optionals stdenv.isDarwin [
+    # Ubsan seems to be broken on aarch64-darwin, it produces linker errors similar to https://github.com/NixOS/nixpkgs/issues/140751
+    ./disable-ubsan.patch
   ];
+
+  buildInputs =
+    [
+      freetype
+      gtk3-x11
+      pcre
+      xorg.libX11
+      xorg.libXrandr
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      webkitgtk
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Frameworks
+      WebKit
+      MetalKit
+      CoreAudioKit
+
+      # Libs
+      simd
+    ];
 
   cmakeFlags = ["-DCMAKE_BUILD_TYPE=Release"];
 
