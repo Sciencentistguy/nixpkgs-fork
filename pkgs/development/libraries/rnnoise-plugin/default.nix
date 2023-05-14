@@ -35,8 +35,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      freetype
-      gtk3-x11
+      freetype gtk3-x11
       pcre
       xorg.libX11
       xorg.libXrandr
@@ -57,5 +56,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ panaeon henrikolsson sciencentistguy ];
+    broken = stdenv.isDarwin;
   };
 }
