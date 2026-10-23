@@ -94,7 +94,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mpv";
-  version = "0.41.0";
+  version = "0.41.0-UNKNOWN";
 
   outputs = [
     "out"
@@ -106,17 +106,15 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo = "mpv";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-gJWqfvPE6xOKlgj2MzZgXiyOKxksJlY/tL6T/BeG19c=";
+    rev = "0fae4695470bf2c0c06762503292ee5379f62f62";
+    hash = "sha256-VlBLnttIApOqckowE/I7sXmj7NRMGTyxd3muNCQuneI=";
   };
 
   postPatch = lib.concatStringsSep "\n" [
     # Don't reference compile time dependencies or create a build outputs cycle
     # between out and dev
     ''
-      substituteInPlace meson.build \
-        --replace-fail "conf_data.set_quoted('CONFIGURATION', meson.build_options())" \
-                       "conf_data.set_quoted('CONFIGURATION', '<omitted>')"
+      sed -i "/set_quoted('CONFIGURATION'/c conf_data.set_quoted('CONFIGURATION', '<omitted>')" meson.build
     ''
     # A trick to patchShebang everything except mpv_identify.sh
     ''

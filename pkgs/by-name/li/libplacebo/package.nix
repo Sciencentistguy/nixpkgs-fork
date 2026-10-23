@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libplacebo";
-  version = "7.360.1";
+  version = "7.384.0";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = "libplacebo";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-h8uMWRe4SysbKNLWdGYxAwj2k7yh4sO62/Ca30mRT3g=";
+    rev = "253c41be7225b53f6218ecf1101bc3484b9b4df0";
+    hash = "sha256-6OVoVjI1L1VM2GzjvNLE6PxvTuwUCgQsgO+EXfplUK4=";
   };
 
   nativeBuildInputs = [
